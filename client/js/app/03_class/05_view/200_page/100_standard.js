@@ -102,7 +102,6 @@ App.view.page.standard = Backbone.View.extend({
   },
   /**
    * コレクションをfetchする
-   * TODO:ちゃんとfetchする
    * @param {function} cb
    * @returns {App.view.page.standard}
    */
@@ -162,6 +161,7 @@ App.view.page.standard = Backbone.View.extend({
   element_mouse_entered_: function (element_view) {
     this.current_element_view_ = element_view;
     this.action_bar_.move_to_element(element_view);
+    element_view.set_active();
     if (element_view.is_editing()) {
       this.action_bar_.set_editing();
     } else {
@@ -181,6 +181,7 @@ App.view.page.standard = Backbone.View.extend({
       this.current_element_view_ = null;
       this.action_bar_.hide().evacuate();
     }
+    element_view.clear_active();
     return this;
   },
   /**

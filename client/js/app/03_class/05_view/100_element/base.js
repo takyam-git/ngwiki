@@ -127,5 +127,13 @@ App.view.element.Base = Backbone.View.extend({
   model_destroyed_: function () {
     this.remove();
     return this;
+  },
+  set_active: function(){
+    this.$el.addClass('active');
+    return this;
+  },
+  clear_active: function(){
+    this.$el.removeClass('active');
+    return this;
   }
 });

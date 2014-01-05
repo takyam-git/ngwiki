@@ -29,7 +29,7 @@
     margin-top: 10px;
 }
 
-.js-element-container.editable>* {
+.js-element.active .js-element-container>* {
     border: 1px dashed #0b97c4;
     background-color: rgba(150,225,200,0.2);
 }

@@ -8,7 +8,6 @@ App.view.element.paragraph = App.view.element.Base.extend({
   before_: null,
   initialize: function () {
     App.view.element.Base.prototype.initialize.call(this);
-    this.listenTo(Backbone.Events, 'other_clicked', 'body_clicked');
   },
   render: function () {
     App.view.element.Base.prototype.render.call(this);
@@ -19,7 +18,6 @@ App.view.element.paragraph = App.view.element.Base.extend({
       this.$wysiwyg.remove();
     }
     var current_html = this.model.get_data('contents');
-    console.log(current_html);
     this.$wysiwyg = $(this.template({text: (current_html ? current_html : '<p>&nbsp;</p>')}));
     this.wysiwyg = new App.utility.wysiwyg({el: this.$wysiwyg});
     this.$container.empty().append(this.$wysiwyg);
@@ -71,10 +69,6 @@ App.view.element.paragraph = App.view.element.Base.extend({
   },
   added: function () {
     this.edit();
-    return this;
-  },
-  other_clicked: function () {
-    this.save();
     return this;
   }
 });

@@ -891,6 +891,14 @@ App.view.element.Base = Backbone.View.extend({
   model_destroyed_: function () {
     this.remove();
     return this;
+  },
+  set_active: function(){
+    this.$el.addClass('active');
+    return this;
+  },
+  clear_active: function(){
+    this.$el.removeClass('active');
+    return this;
   }
 });
 App.view.page.standard = Backbone.View.extend({
@@ -997,7 +1005,6 @@ App.view.page.standard = Backbone.View.extend({
   },
   /**
    * コレクションをfetchする
-   * TODO:ちゃんとfetchする
    * @param {function} cb
    * @returns {App.view.page.standard}
    */
@@ -1057,6 +1064,7 @@ App.view.page.standard = Backbone.View.extend({
   element_mouse_entered_: function (element_view) {
     this.current_element_view_ = element_view;
     this.action_bar_.move_to_element(element_view);
+    element_view.set_active();
     if (element_view.is_editing()) {
       this.action_bar_.set_editing();
     } else {
@@ -1076,6 +1084,7 @@ App.view.page.standard = Backbone.View.extend({
       this.current_element_view_ = null;
       this.action_bar_.hide().evacuate();
     }
+    element_view.clear_active();
     return this;
   },
   /**
@@ -1217,7 +1226,6 @@ App.view.element.paragraph = App.view.element.Base.extend({
   before_: null,
   initialize: function () {
     App.view.element.Base.prototype.initialize.call(this);
-    this.listenTo(Backbone.Events, 'other_clicked', 'body_clicked');
   },
   render: function () {
     App.view.element.Base.prototype.render.call(this);
@@ -1228,7 +1236,6 @@ App.view.element.paragraph = App.view.element.Base.extend({
       this.$wysiwyg.remove();
     }
     var current_html = this.model.get_data('contents');
-    console.log(current_html);
     this.$wysiwyg = $(this.template({text: (current_html ? current_html : '<p>&nbsp;</p>')}));
     this.wysiwyg = new App.utility.wysiwyg({el: this.$wysiwyg});
     this.$container.empty().append(this.$wysiwyg);
@@ -1280,10 +1287,6 @@ App.view.element.paragraph = App.view.element.Base.extend({
   },
   added: function () {
     this.edit();
-    return this;
-  },
-  other_clicked: function () {
-    this.save();
     return this;
   }
 });
