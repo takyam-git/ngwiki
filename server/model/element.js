@@ -1,6 +1,5 @@
 var co = require('co')
-  , thunk = require('thunkify')
-  , thunker = require('thunker')
+  , _ = require('underscore')
   , mongoose = require('mongoose')
   , Schema = mongoose.Schema
   , element_schema = new Schema({
@@ -12,7 +11,17 @@ var co = require('co')
     ]
   });
 
-element_schema.static('sync_create', function (params, data, ack) {
+element_schema.method('format_response', function () {
+  var element_data = this.toObject()
+    , last_history = _.last(this.history);
+  delete(element_data['history']);
+  element_data.data = last_history.data;
+  element_data.last_update_user = last_history.user;
+  element_data.last_update_time = last_history.time;
+  return element_data;
+});
+
+element_schema.static('model_create', function (params, data, ack) {
   var Model_History = mongoose.model('History')
     , Model_Element = mongoose.model('Element')
     , history = new Model_History({data: data.data});
@@ -22,13 +31,13 @@ element_schema.static('sync_create', function (params, data, ack) {
     element.history.push(history);
     element.save(function (err, document) {
       document.populate('history', function () {
-        ack(err, document.toObject());
+        ack(err, document.format_response());
       });
     });
   });
 });
 
-element_schema.static('sync_update', function (params, data, ack) {
+element_schema.static('model_update', function (params, data, ack) {
   if (!params[0]) {
     ack('IDが無いぽよ');
     return;
@@ -43,20 +52,27 @@ element_schema.static('sync_update', function (params, data, ack) {
       ack('そんなIDのやつないぽよ');
       return;
     }
-    try {
-      var Model_History = mongoose.model('History');
-      var history = new Model_History({data: data.data});
-      history.save(function () {
-        element.history.push(history);
-        element.save(function (err, element) {
-          ack(err, element.toObject());
-        });
+    var Model_History = mongoose.model('History');
+    var history = new Model_History({data: data.data});
+    history.save(function () {
+      element.history.push(history);
+      element.save(function (err, element) {
+        ack(err, element.format_response());
       });
-    } catch (errrr) {
-      console.log(errrr);
-    }
+    });
   });
-  console.log(params, data);
+});
+
+element_schema.static('collection_read', function (args, data, ack) {
+  var Model_Element = mongoose.model('Element');
+  Model_Element.find().slice('history', -1).populate('history').exec(function (err, elements) {
+    if (err === null && _.isArray(elements)) {
+      elements = _.map(elements, function (element) {
+        return element.format_response();
+      });
+    }
+    ack(err, elements);
+  })
 });
 
 var Element_Model = mongoose.model('Element', element_schema);

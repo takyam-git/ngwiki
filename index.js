@@ -21,7 +21,11 @@ var server = require('http').Server(app.callback())
   , io = require('socket.io').listen(server);
 io.sockets.on('connection', function (socket) {
   socket.on('sync', function (data, ack) {
-    sync(data.method, data.type, data.path, data.data, ack);
+    try{
+      sync(data.method, data.type, data.path, data.data, ack);
+    }catch(err){
+      console.log('err', err);
+    }
   });
 });
 server.listen(3000);
