@@ -4,12 +4,39 @@
   "description": "Next generation WIKI.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --harmony index.js"
   },
   "keywords": [
     "wiki",
     "koa"
   ],
   "author": "takyam <takayuki.yamaguch.m@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "koa-favicon": "~1.0.1",
+    "koa-route": "~1.0.2",
+    "koa": "~0.2.1",
+    "koa-common": "~1.1.0",
+    "koa-static": "~1.4.1",
+    "socket.io": "~0.9.16",
+    "co-views": "~0.1.0",
+    "swig": "~1.2.2",
+    "autoloader": "~2.1.0",
+    "mongoose": "~3.8.3",
+    "co": "~3.0.2",
+    "thunkify": "0.0.1",
+    "thunker": "0.0.4",
+    "co-fs": "~1.1.1",
+    "underscore": "~1.5.2"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-jshint": "~0.7.2",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.7",
+    "grunt-concat-css": "git://github.com/takyam-git/grunt-concat-css.git#master",
+    "grunt-develop": "~0.3.0"
+  }
 }

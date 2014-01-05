@@ -1,0 +1,20 @@
+body {
+    padding-top: 65px;
+}
+
+.mt0 {
+    margin-top: 0;
+}
+
+.mt5 {
+    margin-top: 5px;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+.js-element-container.editable>* {
+    border: 1px dashed #0b97c4;
+    background-color: rgba(150,225,200,0.2);
+}
